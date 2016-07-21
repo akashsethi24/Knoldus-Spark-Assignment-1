@@ -4,8 +4,8 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
-  * Created by akash on 19/7/16.
-  */
+ * Created by akash on 19/7/16.
+ */
 object GlobalData {
 
   val sparkConf = new SparkConf().setMaster("local").setAppName("Apache Spark")
@@ -43,7 +43,13 @@ class PageCount {
 
   def getPageRequested(dataRDD: RDD[String]): Long = {
 
-    dataRDD.filter(line => line.split(" ")(2).toLong > 200000L).count()
+    val pairRDD = dataRDD.map { line =>
+      val fields = line.split(" ")
+      (fields(1), fields(2).toLong)
+    }
+    val uniquePairRDD = pairRDD.reduceByKey((x, y) => x + y)
+
+    uniquePairRDD.filter { page => page._2 > 200000L }.count()
   }
 
 }
