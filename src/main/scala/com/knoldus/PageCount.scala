@@ -18,7 +18,7 @@ class PageCount {
 
   def getRDD: RDD[String] = {
 
-    sparkContext.textFile("/home/akash/Desktop/pagecounts-20151201-220000")
+    sparkContext.textFile("/home/knoldus/Desktop/pagecount")
   }
 
   def getTenRecords(dataRDD: RDD[String]): List[String] = {
@@ -33,7 +33,7 @@ class PageCount {
 
   def getEnglishPagesRDD(dataRDD: RDD[String]): RDD[String] = {
 
-    dataRDD.filter(line => line.split(" ")(1).contains("/en/"))
+    dataRDD.filter(line => line.split(" ")(0).contains("en"))
   }
 
   def getEnglishPageCount(dataRDD: RDD[String]): Long = {
